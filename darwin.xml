@@ -1,0 +1,286 @@
+<mujoco model="darwinOP">
+  <option iterations="200" timestep="0.002" solver="Newton" gravity="0 0 -9.81" />
+  
+  <compiler angle="radian" meshdir="meshes" eulerseq="zyx" autolimits="true" />
+  
+  <default>
+    <joint limited="true" damping="0.5" armature="0.01" frictionloss="0.1" />
+    <geom condim="6" contype="1" conaffinity="1" friction="1.5 0.1 0.01" 
+          solref="0.02 1" solimp="0.8 0.9 0.001" margin="0.002" />
+    <motor ctrllimited="true" />
+    <default class="visual">
+      <geom contype="0" conaffinity="0" rgba="0.5 0.9 0.2 0.6" />
+    </default>
+  </default>
+
+  <asset>
+    <mesh name="body_coll" file="body_coll.stl" />
+    <mesh name="neck_coll" file="neck_coll.stl" />
+    <mesh name="head_coll_simple" file="head_coll_simple.stl" />
+    <mesh name="shoulder_l_coll" file="shoulder_l_coll.stl" />
+    <mesh name="arm_high_l_coll" file="arm_high_l_coll.stl" />
+    <mesh name="arm_basic_low_l" file="arm_basic_low_l.stl" />
+    <mesh name="shoulder_r_coll" file="shoulder_r_coll.stl" />
+    <mesh name="arm_high_r_coll" file="arm_high_r_coll.stl" />
+    <mesh name="arm_basic_low_r" file="arm_basic_low_r.stl" />
+    <mesh name="pelvis_l_coll" file="pelvis_l_coll.stl" />
+    <mesh name="thigh1_l_coll" file="thigh1_l_coll.stl" />
+    <mesh name="thigh2_l_coll" file="thigh2_l_coll.stl" />
+    <mesh name="tibia_l_coll" file="tibia_l_coll.stl" />
+    <mesh name="ankle1_l_coll" file="ankle1_l_coll.stl" />
+    <mesh name="ankle2_l_coll" file="ankle2_l_coll.stl" />
+    <mesh name="pelvis_r_coll" file="pelvis_r_coll.stl" />
+    <mesh name="thigh1_r_coll" file="thigh1_r_coll.stl" />
+    <mesh name="thigh2_r_coll" file="thigh2_r_coll.stl" />
+    <mesh name="tibia_r_coll" file="tibia_r_coll.stl" />
+    <mesh name="ankle1_r_coll" file="ankle1_r_coll.stl" />
+    <mesh name="ankle2_r_coll" file="ankle2_r_coll.stl" />
+    <texture name="texplane" type="2d" builtin="checker" rgb1=".0 .0 .0" rgb2=".8 .8 .8" width="100" height="100" />
+    <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true" />
+  </asset>
+
+  <worldbody>
+    <light directional="true" diffuse="0.4 0.4 0.4" specular="0.1 0.1 0.1" pos="0 0 5.0" dir="0 0 -1" />
+    <light directional="true" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2" pos="0 0 4" dir="0 0 -1" />
+    <geom name="ground" type="plane" pos="0 0 0" size="100 100 0.1" material="matplane" 
+          condim="3" friction="1.0 0.005 0.0001" />
+    <camera name="fixed" pos="0 -3.0 0.8890166355503697" xyaxes="1 0 0 0 0 1" />
+    <camera name="track" mode="trackcom" pos="0 -3.0 0.8890166355503697" xyaxes="1 0 0 0 0 1" />
+    
+    <body name="root" pos="0 0 0.38901663555036975" quat="1 0 0 0">
+      <freejoint name="root" />
+      <site name="imu" size="0.01" pos="0 0 0" />
+      
+      <geom type="mesh" mesh="body_coll" rgba="0.2 0.2 0.2 1" mass="2.0" />
+      
+      <body name="MP_NECK" pos="0 0 0.0235" quat="0.707107 0 0 0.707107">
+        <inertial pos="-3.2e-07 0.00065035 0.0159284" quat="0.477696 0.52135 0.477696 0.52135" 
+                 mass="0.0243577" diaginertia="6.20788e-06 5.17212e-06 3.22e-06" />
+        <joint name="head_pan" pos="0 0 0" axis="0 0 1" range="-2.61799 2.61799" />
+        <geom type="mesh" mesh="neck_coll" rgba="0.4 0.4 0.4 1" />
+        
+        <body name="MP_HEAD" pos="0 0 0.02715" quat="0.5 -0.5 -0.5 0.5">
+          <inertial pos="0 -0.0244761 6.7e-07" mass="0.158042" diaginertia="0.00012751 0.00012751 0.00012734" />
+          <joint name="head_tilt" pos="0 0 0" axis="0 0 1" range="-1.0472 0.523599" />
+          <geom type="mesh" mesh="head_coll_simple" rgba="0.2 0.2 0.2 1" />
+        </body>
+      </body>
+
+      <body name="MP_SHOULDER_L" pos="0 0.06035 0" quat="0.5 -0.5 -0.5 -0.5">
+        <inertial pos="-0.00578109 2.23e-06 0.0138406" quat="0.635744 0.635744 -0.309563 0.309563" 
+                 mass="0.025913" diaginertia="6.94186e-06 5.43814e-06 3.72e-06" />
+        <joint name="l_sho_pitch" pos="0 0 0" axis="0 0 1" range="-4.36332 4.36332" />
+        <geom type="mesh" mesh="shoulder_l_coll" rgba="0.4 0.4 0.4 1" />
+        
+        <body name="MP_ARM_HIGH_L" pos="-0.016 0 0.02165" quat="0.5 0.5 0.5 -0.5">
+          <inertial pos="-0.0343221 0.00089505 -0.00216268" quat="0.504892 0.495873 0.478499 0.519839" 
+                   mass="0.168377" diaginertia="0.000137432 0.000127007 4.87612e-05" />
+          <joint name="l_sho_roll" pos="0 0 0" axis="0 0 1" range="-1.74533 1.74533" />
+          <geom type="mesh" mesh="arm_high_l_coll" rgba="0.2 0.2 0.2 1" />
+          
+          <body name="MP_ARM_LOW_L" pos="-0.06 0 -0.016" quat="9.38186e-07 -9.38186e-07 0.707107 0.707107">
+            <inertial pos="0.0482422 0.016 -0.000242909" quat="0.464488 0.533152 0.533152 0.464488" 
+                     mass="0.0692885" diaginertia="1.95495e-05 1.86878e-05 1.26917e-05" />
+            <joint name="l_el" pos="0 0 0" axis="0 0 1" range="-2.79253 0" />
+            <geom type="mesh" mesh="arm_basic_low_l" rgba="0.2 0.2 0.2 1" 
+                  pos="0.048 0.016 0" quat="0.707107 0.707107 0 0" />
+          </body>
+        </body>
+      </body>
+
+      <body name="MP_SHOULDER_R" pos="0 -0.06035 0" quat="0.5 0.5 0.5 -0.5">
+        <inertial pos="0.00578109 2.23e-06 0.0138406" quat="0.635744 0.635744 -0.309563 0.309563" 
+                 mass="0.025913" diaginertia="6.94186e-06 5.43814e-06 3.72e-06" />
+        <joint name="r_sho_pitch" pos="0 0 0" axis="0 0 1" range="-4.36332 4.36332" />
+        <geom type="mesh" mesh="shoulder_r_coll" rgba="0.4 0.4 0.4 1" quat="0.000796327 0 0 1" />
+        
+        <body name="MP_ARM_HIGH_R" pos="0.016 0 0.02165" quat="0.5 -0.5 0.5 0.5">
+          <inertial pos="-0.0343287 -0.00089179 -0.00217792" quat="0.519371 0.479082 0.495599 0.50509" 
+                   mass="0.168377" diaginertia="0.000137411 0.000127084 4.87456e-05" />
+          <joint name="r_sho_roll" pos="0 0 0" axis="0 0 1" range="-1.74533 1.74533" />
+          <geom type="mesh" mesh="arm_high_r_coll" rgba="0.2 0.2 0.2 1" />
+          
+          <body name="MP_ARM_LOW_R" pos="-0.06 0 0.016" quat="9.38186e-07 -9.38186e-07 0.707107 0.707107">
+            <inertial pos="0.04867 -0.016 -0.000242909" quat="0.463996 0.53358 0.53358 0.463996" 
+                     mass="0.0692885" diaginertia="1.94187e-05 1.85576e-05 1.26912e-05" />
+            <joint name="r_el" pos="0 0 0" axis="0 0 1" range="0 2.79253" />
+            <geom type="mesh" mesh="arm_basic_low_r" rgba="0.2 0.2 0.2 1" 
+                  pos="0.048 -0.016 0" quat="0.707107 0.707107 0 0" />
+          </body>
+        </body>
+      </body>
+
+      <body name="MP_PELVIS_L" pos="-0.005 0.037 -0.09355" quat="9.38186e-07 0.707107 0.707107 -9.38186e-07">
+        <inertial pos="-3.6e-06 0.00274563 0.0163787" quat="0.70729 0.706923 -0.000348468 0.00061401" 
+                 mass="0.167108" diaginertia="5.095e-05 4.36e-05 2.431e-05" />
+        <joint name="l_hip_yaw" pos="0 0 0" axis="0 0 1" range="-0.785398 2.61799" />
+        <geom type="mesh" mesh="pelvis_l_coll" rgba="0.4 0.4 0.4 1" />
+        
+        <body name="MP_THIGH1_L" pos="0 0 0.028652" quat="0.707107 0.707107 0 0">
+          <inertial pos="-0.00055621 0.0125606 0.0201095" quat="0.99969 -0.0171849 0.00520666 -0.0172505" 
+                   mass="0.119043" diaginertia="8.56583e-05 7.51016e-05 3.72302e-05" />
+          <joint name="l_hip_roll" pos="0 0 0" axis="0 0 1" range="-1.0472 0" />
+          <geom type="mesh" mesh="thigh1_l_coll" rgba="0.01 0.01 0.01 1" />
+          
+          <body name="MP_THIGH2_L" quat="0.5 0.5 -0.5 -0.5">
+            <inertial pos="-0.0505506 -0.00237527 4.59e-06" quat="0.501126 0.500609 0.499277 0.498985" 
+                     mass="0.119043" diaginertia="0.000141701 0.00012927 4.09188e-05" />
+            <joint name="l_hip_pitch" pos="0 0 0" axis="0 0 1" range="-0.523599 1.74533" />
+            <geom type="mesh" mesh="thigh2_l_coll" rgba="0.2 0.2 0.2 1" />
+            
+            <body name="MP_TIBIA_L" pos="-0.093 0 0">
+              <inertial pos="-0.044655 0.00065808 1.657e-05" quat="0.556924 0.553028 0.440219 0.436124" 
+                       mass="0.0703098" diaginertia="8.69802e-05 8.33698e-05 3.682e-05" />
+              <joint name="l_knee" pos="0 0 0" axis="0 0 1" range="-2.26893 0" />
+              <geom type="mesh" mesh="tibia_l_coll" rgba="0.2 0.2 0.2 1" />
+              
+              <body name="MP_ANKLE1_L" pos="-0.093 0 0" quat="1.32679e-06 1 0 0">
+                <inertial pos="0.0126791 -0.0201128 -0.00055849" quat="0.483264 0.499395 -0.496102 0.520522" 
+                         mass="0.167108" diaginertia="0.000120232 0.00010555 5.21878e-05" />
+                <joint name="l_ank_pitch" pos="0 0 0" axis="0 0 1" range="-1.0472 1.0472" />
+                <geom type="mesh" mesh="ankle1_l_coll" rgba="0.01 0.01 0.01 1" />
+                
+                <body name="MP_ANKLE2_L" quat="0.707107 -0.707107 0 0">
+                  <inertial pos="-0.0265986 -0.0106184 -0.00243412" quat="0.999965 0.000752392 -0.00819261 0.00133194" 
+                           mass="0.0794462" diaginertia="9.46277e-05 6.78599e-05 2.93124e-05" />
+                  <joint name="l_ank_roll" pos="0 0 0" axis="0 0 1" range="-0.523599 1.0472" />
+                  <geom type="mesh" mesh="ankle2_l_coll" rgba="0.2 0.2 0.2 1" />
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <body name="MP_PELVIS_R" pos="-0.005 -0.037 -0.09355" quat="9.38186e-07 -0.707107 0.707107 9.38186e-07">
+        <inertial pos="3.59e-06 -0.00274568 0.0163787" quat="0.706923 0.70729 0.000614666 -0.000349124" 
+                 mass="0.167108" diaginertia="5.095e-05 4.361e-05 2.431e-05" />
+        <joint name="r_hip_yaw" pos="0 0 0" axis="0 0 1" range="-2.61799 0.785398" />
+        <geom type="mesh" mesh="pelvis_r_coll" rgba="0.4 0.4 0.4 1" />
+        
+        <body name="MP_THIGH1_R" pos="0 0 0.028652" quat="0.707107 -0.707107 0 0">
+          <inertial pos="-0.00056702 -0.0126846 0.0200955" quat="0.999653 0.0201538 0.00404899 0.0164484" 
+                   mass="0.119043" diaginertia="8.5605e-05 7.51097e-05 3.71653e-05" />
+          <joint name="r_hip_roll" pos="0 0 0" axis="0 0 1" range="0 1.0472" />
+          <geom type="mesh" mesh="thigh1_r_coll" rgba="0.01 0.01 0.01 1" />
+          
+          <body name="MP_THIGH2_R" quat="0.5 0.5 -0.5 -0.5">
+            <inertial pos="0.0505436 -0.00238112 -5.74e-06" quat="0.499236 0.499125 0.50076 0.500876" 
+                     mass="0.119043" diaginertia="0.000141671 0.00012925 4.09189e-05" />
+            <joint name="r_hip_pitch" pos="0 0 0" axis="0 0 1" range="-1.74533 0.523599" />
+            <geom type="mesh" mesh="thigh2_r_coll" rgba="0.2 0.2 0.2 1" />
+            
+            <body name="MP_TIBIA_R" pos="0.093 0 0">
+              <inertial pos="0.044703 0.00064823 -1.647e-05" quat="0.435074 0.44044 0.552968 0.557629" 
+                       mass="0.0703098" diaginertia="8.6773e-05 8.31696e-05 3.68174e-05" />
+              <joint name="r_knee" pos="0 0 0" axis="0 0 1" range="0 2.26893" />
+              <geom type="mesh" mesh="tibia_r_coll" rgba="0.2 0.2 0.2 1" />
+              
+              <body name="MP_ANKLE1_R" pos="0.093 0 0" quat="1.32679e-06 1 0 0">
+                <inertial pos="-0.0125486 -0.0200975 -0.00055246" quat="0.519195 0.497799 -0.497722 0.484671" 
+                         mass="0.167108" diaginertia="0.000120303 0.000105505 5.22823e-05" />
+                <joint name="r_ank_pitch" pos="0 0 0" axis="0 0 1" range="-1.0472 1.0472" />
+                <geom type="mesh" mesh="ankle1_r_coll" rgba="0.01 0.01 0.01 1" />
+                
+                <body name="MP_ANKLE2_R" quat="0.707107 -0.707107 0 0">
+                  <inertial pos="0.0266 -0.0106151 -0.00243811" quat="0.999966 0.000626546 0.00819382 -0.00114108" 
+                           mass="0.0794462" diaginertia="9.46177e-05 6.78499e-05 2.93124e-05" />
+                  <joint name="r_ank_roll" pos="0 0 0" axis="0 0 1" range="-0.523599 1.0472" />
+                  <geom type="mesh" mesh="ankle2_r_coll" rgba="0.2 0.2 0.2 1" />
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor name="head_pan" joint="head_pan" ctrllimited="true" ctrlrange="-2.8 2.8" gear="50" />
+    <motor name="head_tilt" joint="head_tilt" ctrllimited="true" ctrlrange="-2.8 2.8" gear="50" />
+    <motor name="l_sho_pitch" joint="l_sho_pitch" ctrllimited="true" ctrlrange="-2.8 2.8" gear="50" />
+    <motor name="l_sho_roll" joint="l_sho_roll" ctrllimited="true" ctrlrange="-2.8 2.8" gear="50" />
+    <motor name="l_el" joint="l_el" ctrllimited="true" ctrlrange="-2.8 2.8" gear="50" />
+    <motor name="r_sho_pitch" joint="r_sho_pitch" ctrllimited="true" ctrlrange="-2.8 2.8" gear="50" />
+    <motor name="r_sho_roll" joint="r_sho_roll" ctrllimited="true" ctrlrange="-2.8 2.8" gear="50" />
+    <motor name="r_el" joint="r_el" ctrllimited="true" ctrlrange="-2.8 2.8" gear="50" />
+    <motor name="l_hip_yaw" joint="l_hip_yaw" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="l_hip_roll" joint="l_hip_roll" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="l_hip_pitch" joint="l_hip_pitch" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="l_knee" joint="l_knee" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="l_ank_pitch" joint="l_ank_pitch" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="l_ank_roll" joint="l_ank_roll" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="r_hip_yaw" joint="r_hip_yaw" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="r_hip_roll" joint="r_hip_roll" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="r_hip_pitch" joint="r_hip_pitch" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="r_knee" joint="r_knee" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="r_ank_pitch" joint="r_ank_pitch" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+    <motor name="r_ank_roll" joint="r_ank_roll" ctrllimited="true" ctrlrange="-10 10" gear="100" />
+  </actuator>
+
+  <sensor>
+    <actuatorpos name="head_pan_p" actuator="head_pan" />
+    <actuatorvel name="head_pan_v" actuator="head_pan" />
+    <actuatorfrc name="head_pan_f" actuator="head_pan" noise="0.001" />
+    <actuatorpos name="head_tilt_p" actuator="head_tilt" />
+    <actuatorvel name="head_tilt_v" actuator="head_tilt" />
+    <actuatorfrc name="head_tilt_f" actuator="head_tilt" noise="0.001" />
+    <actuatorpos name="l_sho_pitch_p" actuator="l_sho_pitch" />
+    <actuatorvel name="l_sho_pitch_v" actuator="l_sho_pitch" />
+    <actuatorfrc name="l_sho_pitch_f" actuator="l_sho_pitch" noise="0.001" />
+    <actuatorpos name="l_sho_roll_p" actuator="l_sho_roll" />
+    <actuatorvel name="l_sho_roll_v" actuator="l_sho_roll" />
+    <actuatorfrc name="l_sho_roll_f" actuator="l_sho_roll" noise="0.001" />
+    <actuatorpos name="l_el_p" actuator="l_el" />
+    <actuatorvel name="l_el_v" actuator="l_el" />
+    <actuatorfrc name="l_el_f" actuator="l_el" noise="0.001" />
+    <actuatorpos name="r_sho_pitch_p" actuator="r_sho_pitch" />
+    <actuatorvel name="r_sho_pitch_v" actuator="r_sho_pitch" />
+    <actuatorfrc name="r_sho_pitch_f" actuator="r_sho_pitch" noise="0.001" />
+    <actuatorpos name="r_sho_roll_p" actuator="r_sho_roll" />
+    <actuatorvel name="r_sho_roll_v" actuator="r_sho_roll" />
+    <actuatorfrc name="r_sho_roll_f" actuator="r_sho_roll" noise="0.001" />
+    <actuatorpos name="r_el_p" actuator="r_el" />
+    <actuatorvel name="r_el_v" actuator="r_el" />
+    <actuatorfrc name="r_el_f" actuator="r_el" noise="0.001" />
+    <actuatorpos name="l_hip_yaw_p" actuator="l_hip_yaw" />
+    <actuatorvel name="l_hip_yaw_v" actuator="l_hip_yaw" />
+    <actuatorfrc name="l_hip_yaw_f" actuator="l_hip_yaw" noise="0.001" />
+    <actuatorpos name="l_hip_roll_p" actuator="l_hip_roll" />
+    <actuatorvel name="l_hip_roll_v" actuator="l_hip_roll" />
+    <actuatorfrc name="l_hip_roll_f" actuator="l_hip_roll" noise="0.001" />
+    <actuatorpos name="l_hip_pitch_p" actuator="l_hip_pitch" />
+    <actuatorvel name="l_hip_pitch_v" actuator="l_hip_pitch" />
+    <actuatorfrc name="l_hip_pitch_f" actuator="l_hip_pitch" noise="0.001" />
+    <actuatorpos name="l_knee_p" actuator="l_knee" />
+    <actuatorvel name="l_knee_v" actuator="l_knee" />
+    <actuatorfrc name="l_knee_f" actuator="l_knee" noise="0.001" />
+    <actuatorpos name="l_ank_pitch_p" actuator="l_ank_pitch" />
+    <actuatorvel name="l_ank_pitch_v" actuator="l_ank_pitch" />
+    <actuatorfrc name="l_ank_pitch_f" actuator="l_ank_pitch" noise="0.001" />
+    <actuatorpos name="l_ank_roll_p" actuator="l_ank_roll" />
+    <actuatorvel name="l_ank_roll_v" actuator="l_ank_roll" />
+    <actuatorfrc name="l_ank_roll_f" actuator="l_ank_roll" noise="0.001" />
+    <actuatorpos name="r_hip_yaw_p" actuator="r_hip_yaw" />
+    <actuatorvel name="r_hip_yaw_v" actuator="r_hip_yaw" />
+    <actuatorfrc name="r_hip_yaw_f" actuator="r_hip_yaw" noise="0.001" />
+    <actuatorpos name="r_hip_roll_p" actuator="r_hip_roll" />
+    <actuatorvel name="r_hip_roll_v" actuator="r_hip_roll" />
+    <actuatorfrc name="r_hip_roll_f" actuator="r_hip_roll" noise="0.001" />
+    <actuatorpos name="r_hip_pitch_p" actuator="r_hip_pitch" />
+    <actuatorvel name="r_hip_pitch_v" actuator="r_hip_pitch" />
+    <actuatorfrc name="r_hip_pitch_f" actuator="r_hip_pitch" noise="0.001" />
+    <actuatorpos name="r_knee_p" actuator="r_knee" />
+    <actuatorvel name="r_knee_v" actuator="r_knee" />
+    <actuatorfrc name="r_knee_f" actuator="r_knee" noise="0.001" />
+    <actuatorpos name="r_ank_pitch_p" actuator="r_ank_pitch" />
+    <actuatorvel name="r_ank_pitch_v" actuator="r_ank_pitch" />
+    <actuatorfrc name="r_ank_pitch_f" actuator="r_ank_pitch" noise="0.001" />
+    <actuatorpos name="r_ank_roll_p" actuator="r_ank_roll" />
+    <actuatorvel name="r_ank_roll_v" actuator="r_ank_roll" />
+    <actuatorfrc name="r_ank_roll_f" actuator="r_ank_roll" noise="0.001" />
+    <framequat name="orientation" objtype="site" objname="imu" noise="0.001" />
+    <gyro name="angular-velocity" site="imu" noise="0.005" cutoff="34.9" />
+  </sensor>
+</mujoco>
