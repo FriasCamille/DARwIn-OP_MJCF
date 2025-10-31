@@ -6,7 +6,7 @@
   <!-- Configuración para motores MX-28 similar a robot.xml -->
   <default>
     <default class="mx28">
-      <position kp="25" forcerange="-3.0 3.0" />
+      <position kp="25" forcerange="-10.0 10.0" />
       <joint limited="true" damping="0.5" armature="0.01" frictionloss="0.1" />
     </default>
     
